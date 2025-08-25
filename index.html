@@ -5,6 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Sidharth IT Solution - AI Chat Support</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -275,67 +276,59 @@
     &copy; 2025 Sidharth IT Solution. All rights reserved.
   </footer>
 
-  <script>
-    // --- Logo Customization ---
-    // Change this URL to your actual logo image
-    //document.getElementById('companyLogo').src = "https://via.placeholder.com/60/0d6efd/FFFFFF?text=LOGO";
-    // For a placeholder, you could use:
-    // document.getElementById('companyLogo').src = "https://via.placeholder.com/60x60/0d6efd/FFFFFF?text=SITH";
+ 
+<script>
+    // --- Supabase Integration ---
+    const SUPABASE_URL = 'https://heeivzfbsxdxyaxezqdo.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhlZWl2emZic3hkeHlheGV6cWRvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTU5NDYzNDksImV4cCI6MjA3MTUyMjM0OX0.b2DWoCMEJCsjXh0o2PCtoGtEYNbteHbr4FqFJ5isO5U';
+    const supabase = Supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-
-    // --- Chatbot Logic (Simulated) ---
+    // --- Chatbot Logic (Supabase-integrated) ---
     const chatMessages = document.getElementById('chatMessages');
     const chatInput = document.getElementById('chatInput');
 
     function addMessage(message, sender) {
-      const messageDiv = document.createElement('div');
-      messageDiv.classList.add('chat-message', sender);
-      messageDiv.textContent = message;
-      chatMessages.appendChild(messageDiv);
-      chatMessages.scrollTop = chatMessages.scrollHeight; // Scroll to bottom
+        const messageDiv = document.createElement('div');
+        messageDiv.classList.add('chat-message', sender);
+        messageDiv.textContent = message;
+        chatMessages.appendChild(messageDiv);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
     }
 
-    function sendMessage() {
-      const userMessage = chatInput.value.trim();
-      if (userMessage === '') return;
+    async function sendMessage() {
+        const userMessage = chatInput.value.trim().toLowerCase();
+        if (userMessage === '') return;
 
-      addMessage(userMessage, 'user');
-      chatInput.value = '';
+        addMessage(userMessage, 'user');
+        chatInput.value = '';
 
-      // Simulate AI response after a short delay
-      setTimeout(() => {
-        const botResponse = getBotResponse(userMessage.toLowerCase());
+        const userKeywords = userMessage.split(/\s+/).filter(Boolean);
+
+        let botResponse = "I'm sorry, I don't have an answer for that. Please try rephrasing.";
+
+        for (const keyword of userKeywords) {
+            const { data } = await supabase
+                .from('chatbot_responses')
+                .select('answer')
+                .contains('keywords', [keyword])
+                .single();
+
+            if (data) {
+                botResponse = data.answer;
+                break;
+            }
+        }
+
         addMessage(botResponse, 'bot');
-      }, 700); // Simulate typing delay
     }
 
     function handleKeyPress(event) {
-      if (event.key === 'Enter') {
-        sendMessage();
-      }
+        if (event.key === 'Enter') {
+            sendMessage();
+        }
     }
-
-    // Simple simulated bot responses based on keywords
-    function getBotResponse(message) {
-      if (message.includes('hello') || message.includes('hi')) {
-        return "Hello there! How can I help you with Sidharth IT Solution's services?";
-      } else if (message.includes('tally installation') || message.includes('install tally')) {
-        return "We offer quick and correct Tally installation on single or multiple systems. Do you need a new installation or an upgrade?";
-      } else if (message.includes('customization') || message.includes('customize tally')) {
-        return "Yes, we specialize in Tally customization! This includes invoice design, custom reports, and integrating Tally with your specific business processes. What kind of customization are you looking for?";
-      } else if (message.includes('support') || message.includes('assistance')) {
-        return "We provide personalized assistance and support for all your Tally-related queries. What specific issue are you facing, or what assistance do you need?";
-      } else if (message.includes('contact') || message.includes('phone') || message.includes('email')) {
-        return "You can reach us via email at sales@aroundtally.com or call us at 9388513999. How else can I help you?";
-      } else if (message.includes('services')) {
-        return "Sidharth IT Solution provides Tally Installation, Customization, and personalized Assistance & Support. Is there a specific service you'd like to know more about?";
-      } else if (message.includes('thank you') || message.includes('thanks')) {
-        return "You're welcome! Feel free to ask if you have any more questions.";
-      } else {
-        return "I'm sorry, I can only answer questions related to Sidharth IT Solution's services (Tally Installation, Customization, and Support). Can you please rephrase your question?";
-      }
-    }
-  </script>
+</script>
+  
 
 </body>
 </html>

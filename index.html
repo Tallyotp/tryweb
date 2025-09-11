@@ -2,282 +2,278 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Sidharth IT Solution - AI Chat Support</title>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      background: #f4f4f4;
-      color: #333;
-    }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sidharth IT Solution - AI Chat Support</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      background: #f4f4f4;
+      color: #333;
+    }
 
-    header {
-      background: #0d6efd;
-      color: white;
-      padding: 1rem;
-      text-align: center;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
+    header {
+      background: #0d6efd;
+      color: white;
+      padding: 1rem;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
 
-    .header-content {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 100%;
-      max-width: 960px; /* Adjust as needed */
-    }
+    .header-content {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      max-width: 960px; /* Adjust as needed */
+    }
 
-    .logo {
-      height: 60px; /* Adjust logo size */
-      width: auto;
-      margin-right: 20px;
-      border-radius: 50%; /* Optional: for circular logos */
-    }
+    .logo {
+      height: 60px; /* Adjust logo size */
+      width: auto;
+      margin-right: 20px;
+      border-radius: 50%; /* Optional: for circular logos */
+    }
 
-    header h1 {
-      margin: 0;
-      font-size: 2.5rem;
-    }
+    header h1 {
+      margin: 0;
+      font-size: 2.5rem;
+    }
 
-    header p {
-      margin: 5px 0 0;
-      font-size: 1.1rem;
-    }
+    header p {
+      margin: 5px 0 0;
+      font-size: 1.1rem;
+    }
 
-    nav {
-      background: #003eaa;
-      padding: 0.5rem;
-      text-align: center;
-    }
+    nav {
+      background: #003eaa;
+      padding: 0.5rem;
+      text-align: center;
+    }
 
-    nav a {
-      color: white;
-      margin: 0 15px;
-      text-decoration: none;
-      transition: color 0.3s ease;
-    }
+    nav a {
+      color: white;
+      margin: 0 15px;
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
 
-    nav a:hover {
-      color: #add8e6; /* Lighter blue on hover */
-    }
+    nav a:hover {
+      color: #add8e6; /* Lighter blue on hover */
+    }
 
-    .container {
-      padding: 2rem;
-      max-width: 960px;
-      margin: 0 auto;
-    }
+    .container {
+      padding: 2rem;
+      max-width: 960px;
+      margin: 0 auto;
+    }
 
-    .services {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 20px;
-      justify-content: center;
-    }
+    .services {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      justify-content: center;
+    }
 
-    .service-card {
-      background: white;
-      border: 1px solid #ddd;
-      border-radius: 8px; /* Slightly more rounded */
-      padding: 1.5rem;
-      width: 280px; /* Slightly wider cards */
-      text-align: center;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.1); /* Nicer shadow */
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
+    .service-card {
+      background: white;
+      border: 1px solid #ddd;
+      border-radius: 8px; /* Slightly more rounded */
+      padding: 1.5rem;
+      width: 280px; /* Slightly wider cards */
+      text-align: center;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1); /* Nicer shadow */
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
 
-    .service-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 6px 12px rgba(0,0,0,0.15);
-    }
+    .service-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+    }
 
-    .service-card h3 {
-      color: #0d6efd;
-      margin-top: 0;
-    }
+    .service-card h3 {
+      color: #0d6efd;
+      margin-top: 0;
+    }
 
-    /* Chatbot specific styles */
-    .chat-container {
-      max-width: 600px;
-      margin: 2rem auto;
-      background: white;
-      border-radius: 8px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-      display: flex;
-      flex-direction: column;
-      height: 600px; /* Fixed height for chat window */
-      overflow: hidden; /* Hide scrollbar for now, handled by chat-messages */
-    }
+    /* Chatbot specific styles */
+    .chat-container {
+      max-width: 600px;
+      margin: 2rem auto;
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      display: flex;
+      flex-direction: column;
+      height: 600px; /* Fixed height for chat window */
+      overflow: hidden; /* Hide scrollbar for now, handled by chat-messages */
+    }
 
-    .chat-header {
-      background: #0d6efd;
-      color: white;
-      padding: 15px;
-      border-top-left-radius: 8px;
-      border-top-right-radius: 8px;
-      font-size: 1.2rem;
-      font-weight: bold;
-      text-align: center;
-    }
+    .chat-header {
+      background: #0d6efd;
+      color: white;
+      padding: 15px;
+      border-top-left-radius: 8px;
+      border-top-right-radius: 8px;
+      font-size: 1.2rem;
+      font-weight: bold;
+      text-align: center;
+    }
 
-    .chat-messages {
-      flex-grow: 1; /* Takes up available space */
-      padding: 15px;
-      overflow-y: auto; /* Enable scrolling for messages */
-      border-bottom: 1px solid #eee;
-    }
+    .chat-messages {
+      flex-grow: 1; /* Takes up available space */
+      padding: 15px;
+      overflow-y: auto; /* Enable scrolling for messages */
+      border-bottom: 1px solid #eee;
+    }
 
-    .chat-message {
-      margin-bottom: 10px;
-      padding: 8px 12px;
-      border-radius: 15px;
-      max-width: 80%;
-      word-wrap: break-word;
-    }
+    .chat-message {
+      margin-bottom: 10px;
+      padding: 8px 12px;
+      border-radius: 15px;
+      max-width: 80%;
+      word-wrap: break-word;
+    }
 
-    .chat-message.user {
-      background: #e0f7fa; /* Light blue for user messages */
-      align-self: flex-end;
-      margin-left: auto; /* Pushes to the right */
-      border-bottom-right-radius: 2px;
-    }
+    .chat-message.user {
+      background: #e0f7fa; /* Light blue for user messages */
+      align-self: flex-end;
+      margin-left: auto; /* Pushes to the right */
+      border-bottom-right-radius: 2px;
+    }
 
-    .chat-message.bot {
-      background: #f1f1f1; /* Light gray for bot messages */
-      align-self: flex-start;
-      margin-right: auto; /* Pushes to the left */
-      border-bottom-left-radius: 2px; 
-    }
+    .chat-message.bot {
+      background: #f1f1f1; /* Light gray for bot messages */
+      align-self: flex-start;
+      margin-right: auto; /* Pushes to the left */
+      border-bottom-left-radius: 2px; 
+    }
 
-    .chat-input {
-      display: flex;
-      padding: 15px;
-      border-top: 1px solid #eee;
-    }
+    .chat-input {
+      display: flex;
+      padding: 15px;
+      border-top: 1px solid #eee;
+    }
 
-    .chat-input input[type="text"] {
-      flex-grow: 1;
-      padding: 10px 15px;
-      border: 1px solid #ccc;
-      border-radius: 25px;
-      margin-right: 10px;
-      font-size: 1rem;
-    }
+    .chat-input input[type="text"] {
+      flex-grow: 1;
+      padding: 10px 15px;
+      border: 1px solid #ccc;
+      border-radius: 25px;
+      margin-right: 10px;
+      font-size: 1rem;
+    }
 
-    .chat-input button {
-      padding: 10px 20px;
-      background: #0d6efd;
-      color: white;
-      border: none;
-      border-radius: 25px;
-      cursor: pointer;
-      font-size: 1rem;
-      transition: background 0.3s ease;
-    }
+    .chat-input button {
+      padding: 10px 20px;
+      background: #0d6efd;
+      color: white;
+      border: none;
+      border-radius: 25px;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: background 0.3s ease;
+    }
 
-    .chat-input button:hover {
-      background: #0056b3;
-    }
+    .chat-input button:hover {
+      background: #0056b3;
+    }
 
 
-    footer {
-      background: #0d6efd;
-      color: white;
-      text-align: center;
-      padding: 1rem;
-      /* position: fixed; */ /* Removed fixed position to allow natural flow */
-      bottom: 0;
-      width: 100%;
-      margin-top: 2rem; /* Add some space above footer */
-    }
+    footer {
+      background: #0d6efd;
+      color: white;
+      text-align: center;
+      padding: 1rem;
+      /* position: fixed; */ /* Removed fixed position to allow natural flow */
+      bottom: 0;
+      width: 100%;
+      margin-top: 2rem; /* Add some space above footer */
+    }
 
-    /* Responsive Design */
-    @media (max-width: 768px) {
-      .services {
-        flex-direction: column;
-        align-items: center;
-      }
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .services {
+        flex-direction: column;
+        align-items: center;
+      }
 
-      .service-card {
-        width: 90%;
-      }
+      .service-card {
+        width: 90%;
+      }
 
-      .chat-container {
-        height: 500px; /* Adjust height for smaller screens */
-        margin: 1rem;
-      }
+      .chat-container {
+        height: 500px; /* Adjust height for smaller screens */
+        margin: 1rem;
+      }
 
-      .header-content {
-        flex-direction: column;
-      }
+      .header-content {
+        flex-direction: column;
+      }
 
-      .logo {
-        margin-right: 0;
-        margin-bottom: 10px;
-      }
-    }
-  </style>
+      .logo {
+        margin-right: 0;
+        margin-bottom: 10px;
+      }
+    }
+  </style>
 </head>
 <body>
 
-  <header>
-  <!--  <div class="header-content">
-      <img src="https://via.placeholder.com/60/0d6efd/FFFFFF?text=LOGO" alt="Sidharth IT Solution Logo" class="logo" id="companyLogo">
-      <div>-->
-        <h1>Sidharth IT Solution</h1>
-        <p>Installation | Customization | Support</p>
-      </div>
-    </div>
-  </header>
+  <header>
+            <h1>Sidharth IT Solution</h1>
+        <p>Installation | Customization | Support</p>
+      </div>
+    </div>
+  </header>
 
-  <nav>
-    <a href="#services-section">Our Services</a>
-    <a href="#chat-support">AI Chat Support</a>
-  </nav>
+  <nav>
+    <a href="#services-section">Our Services</a>
+    <a href="#chat-support">AI Chat Support</a>
+  </nav>
 
-  <div class="container" id="services-section">
-    <h2>Our Services</h2>
-    <div class="services">
-      <div class="service-card">
-        <h3>Tally Installation</h3>
-        <p>Get Tally installed on single or multiple systems quickly and correctly.</p>
-      </div>
-      <div class="service-card">
-        <h3>Customization</h3>
-        <p>We customize Tally to match your business needs including invoice design, reports, etc.</p>
-      <div class="service-card">
-        <h3>Assistance & Support</h3>
-        <p>Personalized Assistance & Support.</p>
-      </div>
-    </div>
-  </div>
+  <div class="container" id="services-section">
+    <h2>Our Services</h2>
+    <div class="services">
+      <div class="service-card">
+        <h3>Tally Installation</h3>
+        <p>Get Tally installed on single or multiple systems quickly and correctly.</p>
+      </div>
+      <div class="service-card">
+        <h3>Customization</h3>
+        <p>We customize Tally to match your business needs including invoice design, reports, etc.</p>
+      <div class="service-card">
+        <h3>Assistance & Support</h3>
+        <p>Personalized Assistance & Support.</p>
+      </div>
+    </div>
+  </div>
 
-  <div class="container" id="chat-support">
-    <h2>AI Chat Support</h2>
-    <div class="chat-container">
-      <div class="chat-header">
-        Sidharth IT Bot
-      </div>
-      <div class="chat-messages" id="chatMessages">
-        <div class="chat-message bot">Hello! I'm Sidharth IT Bot. How can I assist you with Tally solutions today?</div>
-      </div>
-      <div class="chat-input">
-        <input type="text" id="chatInput" placeholder="Type your message..." onkeypress="handleKeyPress(event)">
-        <button onclick="sendMessage()">Send</button>
-      </div>
-    </div>
-  </div>
+  <div class="container" id="chat-support">
+    <h2>AI Chat Support</h2>
+    <div class="chat-container">
+      <div class="chat-header">
+        Sidharth IT Bot
+      </div>
+      <div class="chat-messages" id="chatMessages">
+        <div class="chat-message bot">Hello! I'm Sidharth IT Bot. How can I assist you with Tally solutions today?</div>
+      </div>
+      <div class="chat-input">
+        <input type="text" id="chatInput" placeholder="Type your message..." onkeypress="handleKeyPress(event)">
+        <button onclick="sendMessage()">Send</button>
+      </div>
+    </div>
+  </div>
 
-  <footer>
-    &copy; 2025 Sidharth IT Solution. All rights reserved.
-  </footer>
-
- 
-<script>
+  <footer>
+    &copy; 2025 Sidharth IT Solution. All rights reserved.
+  </footer>
+    
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
     // --- Supabase Integration ---
     const SUPABASE_URL = 'https://heeivzfbsxdxyaxezqdo.supabase.co';
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhlZWl2emZic3hkeHlheGV6cWRvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTU5NDYzNDksImV4cCI6MjA3MTUyMjM0OX0.b2DWoCMEJCsjXh0o2PCtoGtEYNbteHbr4FqFJ5isO5U';
@@ -327,8 +323,7 @@
             sendMessage();
         }
     }
-</script>
-  
+  </script>
 
 </body>
 </html>

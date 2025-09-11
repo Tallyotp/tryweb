@@ -1,218 +1,232 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sidharth IT Solution - AI Chat Support</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --primary-color: #4A90E2;
+            --secondary-color: #2F80ED;
+            --background-color: #F4F7F9;
+            --card-background: #FFFFFF;
+            --text-color: #333333;
+            --light-gray: #E0E0E0;
+            --user-message-bg: #D1E7FF;
+            --bot-message-bg: #F1F3F5;
+        }
+
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Poppins', Arial, sans-serif;
             margin: 0;
-            background: #f4f4f4;
-            color: #333;
+            background: var(--background-color);
+            color: var(--text-color);
+            line-height: 1.6;
         }
 
         header {
-            background: #0d6efd;
+            background: var(--secondary-color);
             color: white;
-            padding: 1rem;
+            padding: 2rem 1rem;
             text-align: center;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        .header-content {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 100%;
-            max-width: 960px;
-        }
-
-        .logo {
-            height: 60px;
-            width: auto;
-            margin-right: 20px;
-            border-radius: 50%;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
         }
 
         header h1 {
             margin: 0;
-            font-size: 2.5rem;
+            font-size: 2.8rem;
+            font-weight: 600;
         }
 
         header p {
-            margin: 5px 0 0;
+            margin: 0.5rem 0 0;
             font-size: 1.1rem;
+            font-weight: 300;
         }
 
         nav {
-            background: #003eaa;
-            padding: 0.5rem;
+            background: var(--primary-color);
+            padding: 0.75rem 0;
             text-align: center;
         }
 
         nav a {
             color: white;
-            margin: 0 15px;
+            margin: 0 20px;
             text-decoration: none;
+            font-weight: 400;
+            font-size: 1rem;
             transition: color 0.3s ease;
         }
 
         nav a:hover {
-            color: #add8e6;
+            color: var(--light-gray);
         }
 
         .container {
-            padding: 2rem;
-            max-width: 960px;
+            padding: 3rem 1rem;
+            max-width: 1000px;
             margin: 0 auto;
         }
 
+        .section-title {
+            text-align: center;
+            font-size: 2.2rem;
+            font-weight: 600;
+            margin-bottom: 2rem;
+            color: var(--secondary-color);
+        }
+
         .services {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
             justify-content: center;
         }
 
         .service-card {
-            background: white;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            padding: 1.5rem;
-            width: 280px;
+            background: var(--card-background);
+            border-radius: 15px;
+            padding: 2rem;
             text-align: center;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
             transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
 
         .service-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+            transform: translateY(-8px);
+            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.12);
         }
 
         .service-card h3 {
-            color: #0d6efd;
+            color: var(--primary-color);
             margin-top: 0;
+            font-size: 1.5rem;
+            font-weight: 600;
         }
 
         .chat-container {
-            max-width: 600px;
-            margin: 2rem auto;
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            max-width: 650px;
+            margin: 3rem auto;
+            background: var(--card-background);
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
             display: flex;
             flex-direction: column;
-            height: 600px;
+            height: 650px;
             overflow: hidden;
         }
 
         .chat-header {
-            background: #0d6efd;
+            background: var(--primary-color);
             color: white;
-            padding: 15px;
-            border-top-left-radius: 8px;
-            border-top-right-radius: 8px;
-            font-size: 1.2rem;
-            font-weight: bold;
+            padding: 18px;
+            border-top-left-radius: 15px;
+            border-top-right-radius: 15px;
+            font-size: 1.3rem;
+            font-weight: 600;
             text-align: center;
         }
 
         .chat-messages {
             flex-grow: 1;
-            padding: 15px;
+            padding: 20px;
             overflow-y: auto;
-            border-bottom: 1px solid #eee;
+            border-bottom: 1px solid var(--light-gray);
         }
 
         .chat-message {
-            margin-bottom: 10px;
-            padding: 8px 12px;
-            border-radius: 15px;
-            max-width: 80%;
+            margin-bottom: 15px;
+            padding: 12px 18px;
+            border-radius: 25px;
+            max-width: 85%;
             word-wrap: break-word;
+            font-size: 0.95rem;
         }
 
         .chat-message.user {
-            background: #e0f7fa;
+            background: var(--user-message-bg);
             align-self: flex-end;
             margin-left: auto;
-            border-bottom-right-radius: 2px;
+            border-bottom-right-radius: 5px;
         }
 
         .chat-message.bot {
-            background: #f1f1f1;
+            background: var(--bot-message-bg);
             align-self: flex-start;
             margin-right: auto;
-            border-bottom-left-radius: 2px;
+            border-bottom-left-radius: 5px;
         }
 
         .chat-input {
             display: flex;
-            padding: 15px;
-            border-top: 1px solid #eee;
+            padding: 20px;
+            border-top: 1px solid var(--light-gray);
         }
 
         .chat-input input[type="text"] {
             flex-grow: 1;
-            padding: 10px 15px;
-            border: 1px solid #ccc;
-            border-radius: 25px;
-            margin-right: 10px;
+            padding: 12px 20px;
+            border: 1px solid var(--light-gray);
+            border-radius: 30px;
+            margin-right: 12px;
             font-size: 1rem;
+            outline: none;
+            transition: border-color 0.3s ease;
+        }
+
+        .chat-input input[type="text"]:focus {
+            border-color: var(--primary-color);
         }
 
         .chat-input button {
-            padding: 10px 20px;
-            background: #0d6efd;
+            padding: 12px 25px;
+            background: var(--primary-color);
             color: white;
             border: none;
-            border-radius: 25px;
+            border-radius: 30px;
             cursor: pointer;
             font-size: 1rem;
+            font-weight: 600;
             transition: background 0.3s ease;
         }
 
         .chat-input button:hover {
-            background: #0056b3;
+            background: var(--secondary-color);
         }
 
         footer {
-            background: #0d6efd;
+            background: var(--secondary-color);
             color: white;
             text-align: center;
-            padding: 1rem;
-            bottom: 0;
+            padding: 1.5rem;
             width: 100%;
-            margin-top: 2rem;
+            margin-top: 4rem;
         }
 
         @media (max-width: 768px) {
-            .services {
-                flex-direction: column;
-                align-items: center;
+            header h1 {
+                font-size: 2rem;
             }
 
-            .service-card {
-                width: 90%;
+            .container {
+                padding: 1.5rem 1rem;
+            }
+
+            .section-title {
+                font-size: 1.8rem;
+            }
+
+            .services {
+                grid-template-columns: 1fr;
             }
 
             .chat-container {
                 height: 500px;
-                margin: 1rem;
-            }
-
-            .header-content {
-                flex-direction: column;
-            }
-
-            .logo {
-                margin-right: 0;
-                margin-bottom: 10px;
+                margin: 2rem 1rem;
             }
         }
     </style>
@@ -230,7 +244,7 @@
     </nav>
 
     <div class="container" id="services-section">
-        <h2>Our Services</h2>
+        <h2 class="section-title">Our Services</h2>
         <div class="services">
             <div class="service-card">
                 <h3>Tally Installation</h3>
@@ -248,7 +262,7 @@
     </div>
 
     <div class="container" id="chat-support">
-        <h2>AI Chat Support</h2>
+        <h2 class="section-title">AI Chat Support</h2>
         <div class="chat-container">
             <div class="chat-header">
                 Sidharth IT Bot
@@ -295,15 +309,16 @@
 
             let botResponse = "I'm sorry, I don't have an answer for that. Please try rephrasing.";
 
+            // Iterate through each keyword to find a matching response
             for (const keyword of userKeywords) {
                 const { data } = await supabase
                     .from('chatbot_responses')
-                    .select('answer')
-                    .contains('keywords', [keyword])
+                    .select('Answers') // Note: Column name is "Answers" with a capital A
+                    .contains('Keywords', [keyword]) // Note: Column name is "Keywords" with a capital K
                     .single();
 
                 if (data) {
-                    botResponse = data.answer;
+                    botResponse = data.Answers; // Note: Accessing "Answers" with a capital A
                     break;
                 }
             }
